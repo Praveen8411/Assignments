@@ -1,38 +1,36 @@
-package Test;
+package com.multisite.MiniRegression;
 
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import Pageobject.UpworkPage;
+import com.multisite.Library.AppLibrary;
+import com.multisite.Library.TestBase;
+import com.multisite.PageObject.UpworkPage;
 
-public class UpworkTest {
+public class UpworkTest extends TestBase {
+	
 	private UpworkPage up;
-	WebDriver driver;
 	private String domainName;
 	
-	@BeforeTest	
-	public void setup(){
-		    //driver = new FirefoxDriver();
-	    	/*System.setProperty("webdriver.gecko.driver", "E:\\geckodriver.exe");
-	    	driver.get("https://www.upwork.com/");
-	    	up = new UpworkPage(driver);
-	    	driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
- 	        driver.manage().window().maximize();
- 	        domainName = "qa";*/
-		System.setProperty("webdriver.firefox.profile", "E:\\geckodriver.exe");
-				DesiredCapabilities capabilities = DesiredCapabilities.firefox();
-				capabilities.setCapability("marionette", true);
-				WebDriver driver = new FirefoxDriver(capabilities);
-				driver.get("www.google.com");
-	    }
+	@BeforeClass
+	public void setUp() throws Exception {
+		// Get the AppLibrary Object which is used to call the methods
+		appLibrary = new AppLibrary("UpworkTest");
+		up = new UpworkPage(appLibrary);
+		domainName = "QA";
+	}
+	
+	public void launchApp() throws Exception {
+		appLibrary.getDriverInstance();
+		appLibrary.launchApp();
+	}
 	
 	@Test(priority=1)
-	public void sendDomainName() {
+	public void sendDomainName() throws Exception {
+		launchApp();
 		up.searchFreeLancers(domainName);
-		up.getAllTitles();
+		up.storeData(domainName);
 	}
+	
 
 }
